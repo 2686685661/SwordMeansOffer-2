@@ -5,5 +5,7 @@
 - string 串
 - tree 树
 - map 图
+- treap 树堆
+- trie 字典树(前缀树)
 
 ![](./assets/Oalgo.png)
