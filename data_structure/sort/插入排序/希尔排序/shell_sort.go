@@ -13,6 +13,8 @@ please input description
 
 package 希尔排序
 
+//https://blog.csdn.net/lishanleilixin/article/details/88585863
+
 // 希尔排序
 // 增量d的取法：
 // d = math.Floor(len(elem)) / 3
