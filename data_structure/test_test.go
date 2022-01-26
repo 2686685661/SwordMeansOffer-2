@@ -260,6 +260,7 @@ func mergeUp2DownSort(elem []int, low, high int) []int {
 	return elem
 }
 
+// 从下往上归并排序
 func mergeDown2UpSort(elem []int) []int {
 	mergeGroup := func(elem []int, gap, len int) []int {
 		var i int
