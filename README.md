@@ -1,5 +1,19 @@
-# 算法练习
+# 算法+数据结构 练习
 golang
+
+## data_structure
+### 数据结构学习
+- linklist 单链表
+- stack 栈
+- queue 链表
+- string 串
+- tree 树
+- map 图
+- treap 树堆
+- trie 字典树(前缀树)
+- sort 排序
+- search 查找
+
 
 ## offer-I
 ###《剑指offer 第一版》 
@@ -85,5 +99,4 @@ golang
 ###《剑指offer 专项突击版》
 ### 习题来源：https://leetcode-cn.com/problem-list/e8X3pBZi
 
-## data_structure
-### 数据结构学习
+

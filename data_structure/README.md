@@ -7,5 +7,8 @@
 - map 图
 - treap 树堆
 - trie 字典树(前缀树)
+- sort 排序
+- search 查找
+
 
 ![](./assets/Oalgo.png)
