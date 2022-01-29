@@ -3,16 +3,16 @@ golang
 
 ## data_structure
 ### 数据结构学习
-- linklist 单链表
-- stack 栈
-- queue 链表
-- string 串
-- tree 树
-- map 图
-- treap 树堆
-- trie 字典树(前缀树)
-- sort 排序
-- search 查找
+[单链表](./data_structure/linklist)  
+[图](./data_structure/map)  
+[队列](./data_structure/queue)  
+[查找](./data_structure/search)  
+[排序](./data_structure/sort)  
+[栈](./data_structure/stack)  
+[串](./data_structure/string)  
+[树堆](./data_structure/treap)  
+[树](./data_structure/tree)  
+[字典树(前缀树)](./data_structure/trie)  
 
 
 ## offer-I
