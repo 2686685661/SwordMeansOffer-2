@@ -14,6 +14,10 @@ golang
 [树](./data_structure/tree)  
 [字典树(前缀树)](./data_structure/trie)  
 
+## interview-go
+### goalng面试题搜集
+参考：https://github.com/lifei6671/interview-go
+
 
 ## offer-I
 ###《剑指offer 第一版》 
