@@ -11,7 +11,7 @@ DESCRIPTION
 please input description
 */
 
-package _61_和最小的_k_个数对
+package _61_和最小的k个数对
 
 import "container/heap"
 

@@ -18,6 +18,10 @@ import (
 	"strings"
 )
 
+/**
+回溯法
+ */
+
 func restoreIpAddresses(s string) []string {
 	if s == "" {
 		return nil
