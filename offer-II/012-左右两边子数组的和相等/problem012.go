@@ -14,6 +14,7 @@ please input description
 package _12_左右两边子数组的和相等
 
 // 前缀和思想
+// https://leetcode-cn.com/problems/tvdfij/solution/zuo-you-liang-bian-zi-shu-zu-de-he-xiang-5j4r/
 func pivotIndex(nums []int) int {
 	if nums == nil || len(nums) < 1 {
 		return -1

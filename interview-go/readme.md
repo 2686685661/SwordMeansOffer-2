@@ -24,3 +24,9 @@ go大汇集：http://www.topgoer.com/
 ## 性能分析和优化
 [Go 语言中的大杀器](https://golang2.eddycjy.com/posts/ch6/01-pprof-1/)
 [golang pprof 实战](https://blog.wolfogre.com/posts/go-ppof-practice/#%E5%89%8D%E8%A8%80)
+
+
+
+## golang 设计模式
+https://github.com/sevenelevenlee/go-patterns
+https://github.com/pibigstar/go-demo/tree/master/design

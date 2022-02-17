@@ -3,7 +3,7 @@
 /*
 modification history
 --------------------
-2022/2/9 4:27 下午, by lishanlei, create
+2022/2/18 12:19 上午, by lishanlei, create
 */
 
 /*
@@ -11,12 +11,11 @@ DESCRIPTION
 please input description
 */
 
+package _8_外观模式_facade_
 
-package main
+import "testing"
 
-import "fmt"
-
-func main() {
-	var a []int
-	fmt.Println(a)
+func TestFacade(t *testing.T) {
+	startBtn := &StartBtn{}
+	startBtn.start()
 }

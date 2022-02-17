@@ -18,6 +18,23 @@ golang
 ### goalng面试题搜集
 参考：https://github.com/lifei6671/interview-go
 
+## patterns-go
+### goalng实现常用设计模式
+[goalng实现常用设计模式](./patterns-go/readme.md)  
+- 01-策略模式(strategy)
+- 02-装饰器模式(decorator)
+- 03-适配器模式(adaptor)
+- 04-单例模式(singleton)
+- 05-观察者模式(observer)
+- 06-工厂模式(factory)
+- 07-模版方法(template)
+- 08-外观模式(facade)
+- 09-代理模式(proxy)
+- 10-责任链模式(chain)
+- 11-功能选项模式(options)
+- 12-工人列队模式(worker)
+
+
 
 ## offer-I
 ###《剑指offer 第一版》 

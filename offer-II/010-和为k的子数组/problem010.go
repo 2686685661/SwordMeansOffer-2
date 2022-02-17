@@ -28,7 +28,7 @@ func subarraySum(nums []int, k int) int {
 	dict := make(map[int]int)
 	dict[0] = 1
 
-	for n := range nums {
+	for _, n := range nums {
 		preSum += n
 		ret += dict[preSum - k]
 		dict[preSum] += 1
