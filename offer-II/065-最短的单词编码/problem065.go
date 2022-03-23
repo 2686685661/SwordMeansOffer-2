@@ -1,4 +1,4 @@
-/* Copyright 2022 Baidu Inc. All Rights Reserved. */
+/* *****. */
 /* - please input the go file action-  */
 /*
 modification history
@@ -13,6 +13,13 @@ please input description
 
 package _65_最短的单词编码
 
+/**
+字典树
+https://leetcode-cn.com/problems/iSwD2y/solution/zui-duan-de-dan-ci-bian-ma-by-leetcode-s-qjxw/
+
+去找到是否不同的单词具有相同的后缀，我们可以将其反序之后插入字典树中。例如，我们有 "time" 和 "me"，可以将 "emit" 和 "em" 插入字典树中。
+然后，字典树的叶子节点（没有孩子的节点）就代表没有后缀的单词，统计叶子节点代表的单词长度加一的和即为我们要的答案。
+ */
 func minimumLengthEncoding(words []string) int {
 
 	if words == nil || len(words) == 0 {

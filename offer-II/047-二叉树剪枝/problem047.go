@@ -1,4 +1,3 @@
-/* Copyright 2022 Baidu Inc. All Rights Reserved. */
 /* - please input the go file action-  */
 /*
 modification history
@@ -12,6 +11,8 @@ please input description
 */
 
 package _47_二叉树剪枝
+
+//https://leetcode-cn.com/problems/pOCWxh/solution/jian-zhi-offer-2-mian-shi-ti-47-shu-zhon-mztd/
 
 type TreeNode struct {
 	Val int

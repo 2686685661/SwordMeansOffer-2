@@ -1,4 +1,3 @@
-/* Copyright 2022 Baidu Inc. All Rights Reserved. */
 /* - please input the go file action-  */
 /*
 modification history
@@ -14,6 +13,7 @@ please input description
 package data_structure
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 )
 
@@ -32,7 +32,7 @@ func TestSort(t *testing.T) {
 	fmt.Println("CountSort: ", CountSort(elem))
 	fmt.Println("RadixSort: ", RadixSort(elem))
 
-
+fmt.Sprintln()
 
 }
 
@@ -137,12 +137,18 @@ func QuickSort(elem []int, low, high int) []int {
 	if elem == nil || len(elem) < 2 {
 		return elem
 	}
+	//if low < high {
+	//	pivot := partition(elem, low, high)
+	//	QuickSort(elem, low, pivot - 1)
+	//	QuickSort(elem, pivot + 1, high)
+	//}
 	// 使用尾递归优化递归操作
 	for low < high {
 		pivot := partition(elem, low, high)
 		QuickSort(elem, low, pivot - 1)
 		low = pivot + 1
 	}
+
 	return elem
 }
 func partition(elem []int, low, high int) int {
@@ -435,4 +441,75 @@ func RadixSort(elem []int) []int {
 		elem = countSort(elem, exp)
 	}
 	return elem
+}
+
+
+
+type node struct {
+	priority int
+	val int
+	child [2]*node
+}
+func ( n *node) contrast(val int) (res int) {
+	res = -1
+	if n.val < val {
+		res = 0
+	} else if n.val > val {
+		res = 1
+	}
+	return
+}
+
+func (n *node) rotate(d int) *node {
+	pivot := n.child[d ^ 1]
+	n.child[d ^ 1] = pivot.child[d]
+	pivot.child[d] = n
+	return pivot
+}
+
+
+type treap struct {
+	root *node
+}
+
+func (t *treap) Put(val int) {
+	t.root = t.put(t.root, val)
+}
+
+func (t *treap) put(root *node, val int) *node {
+	if root == nil {
+		return &node{
+			priority: rand.Int(),
+			val:      val,
+		}
+	}
+	d := root.contrast(val)
+	root.child[d] = t.put(root.child[d], val)
+	if root.child[d].priority > root.priority {
+		root = root.rotate(d ^ 1)
+	}
+	return root
+}
+
+func (t *treap) Del(val int) {
+	t.root = t.del(t.root, val)
+}
+func (t *treap) del(root *node, val int) *node {
+	if d := root.contrast(val); d >= 0 {
+		root.child[d] = t.del(root.child[d], val)
+		return root
+	}
+	if root.child[0] == nil {
+		return root.child[1]
+	}
+	if root.child[1] == nil {
+		return root.child[0]
+	}
+	d := 0
+	if root.child[0].priority > root.child[1].priority {
+		d = 1
+	}
+	root = root.rotate(d)
+	root.child[d] = t.del(root.child[d], val)
+	return root
 }

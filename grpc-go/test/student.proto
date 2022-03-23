@@ -1,0 +1,21 @@
+syntax = "proto3";
+package main;
+import "google/protobuf/any.proto";
+//option go_package = "/proto";
+// this is a comment
+message Student {
+    string name = 1;
+    bool male = 2;
+    repeated int32 scores = 3;
+    enum Gender {
+        option allow_alias = true;
+        FEMALE = 0;
+        MALE  = 1;
+        TEST = 1;
+    }
+    Gender gender  = 4;
+    repeated google.protobuf.Any details = 5;
+    map<string, int32> points = 6;
+}
+
+

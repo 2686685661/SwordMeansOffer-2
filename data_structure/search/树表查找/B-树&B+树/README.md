@@ -1,2 +1,2 @@
 # B树和B+树
-参考：[B树和B+树的插入、删除图文详解](https://blog.csdn.net/lishanleilixin/article/details/95945943?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522162847944516780262597281%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=162847944516780262597281&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_v2~rank_v29-1-95945943.pc_v2_rank_blog_default&utm_term=B&sp6.3001.4450m=1018.222)
+参考：[B树和B+树的插入、删除图文详解](https://www.cnblogs.com/nullzx/p/8729425.html)

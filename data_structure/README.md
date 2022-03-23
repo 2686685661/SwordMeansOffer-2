@@ -9,6 +9,7 @@
 - trie 字典树(前缀树)
 - sort 排序
 - search 查找
+- bitmap 位图
 
 
 ![](./assets/Oalgo.png)

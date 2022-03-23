@@ -1,4 +1,4 @@
-/* Copyright 2022 Baidu Inc. All Rights Reserved. */
+/* *****. */
 /* - please input the go file action-  */
 /*
 modification history
@@ -69,6 +69,7 @@ func dfs(root *TreeNode, depth int) {
 		return
 	}
 
+	// 遍历到当前层的第一个节点直接加入答案
 	if len(list) < depth + 1 {
 		list = append(list, root.Val)
 	} else if root.Val > list[depth] {

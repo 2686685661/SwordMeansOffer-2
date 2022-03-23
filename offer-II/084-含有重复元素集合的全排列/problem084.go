@@ -1,4 +1,3 @@
-/* Copyright 2022 Baidu Inc. All Rights Reserved. */
 /* - please input the go file action-  */
 /*
 modification history

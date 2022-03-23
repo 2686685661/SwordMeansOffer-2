@@ -1,591 +1,626 @@
-/* Copyright 2021 Baidu Inc. All Rights Reserved. */
-/* - please input the go file action-  */
-/*
-modification history
---------------------
-2021/12/22 8:17 下午, by lishanlei, create
-*/
-
-/*
-DESCRIPTION
-please input description
-*/
-
-package main
+package test
 
 import (
-	"fmt"
-	"math"
-	"math/rand"
+	"container/heap"
 	"sort"
-	"strconv"
 )
 
-// 异或：相同为0，不同为1
-func main() {
-	//fmt.Println(4 ^ 0)
-
-	//maxProduct([]string{"ab", "cd"})
-
-	//nums := []int{-1,0,1,2,-1,-4}
-	//sort.Ints(nums)
-	//fmt.Println(nums)
-
-	//m := make(map[int]int)
-	//m[1] = 1
-	//m[2] = 2
-	//m[3] = 3
-	//if _,ok := m[3]; ok {
-	//	fmt.Println("fuck")
-	//}
-	//for k, _ := range m {
-	//	fmt.Println(k)
-	//	//break
-	//}
-
-	//fmt.Println(1 ^ 1)
-	//set := &treap{}
-	//for i := 0; i < 10; i++ {
-	//	set.Put(i)
-	//}
-	//
-	//
-	//inorder(set.root)
-	//fmt.Printf("\n")
-	//
-	//set.Del(3)
-	//inorder(set.root)
-	arr := []string{"me", "time"}
-	sort.Strings(arr)
-	fmt.Println(arr)
-
-
+type IHeap [][]int
+func (h IHeap) Len() int {
+	return len(h)
 }
-
-
-
-
-
-func inorder(n *node) {
-	if n == nil {
-		return
-	}
-	inorder(n.ch[0])
-	fmt.Printf("%d\t", n.val)
-	inorder(n.ch[1])
+func (h IHeap) Less(i, j int) bool {
+	return h[i][0] + h[i][1] > h[j][0] + h[j][1]
 }
-
-// 树节点
-type node struct {
-	priority int
-	val int
-	ch [2]*node
+func (h IHeap) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
 }
-
-// 二分比较
-func (n *node) contrast(val int) (res int) {
-	res = -1
-	if val < n.val {
-		res = 0
-	} else if val > n.val {
-		res = 1
-	}
-	return
+func (h *IHeap) Push(x interface{}) {
+	*h = append(*h, x.([]int))
 }
-
-// 树旋转
-// d=0 对o进行左旋
-// d=1 对o进行右旋
-func (n *node) rotate(d int) *node {
-	pivot := n.ch[d ^ 1] // 左旋，则转轴是o的右子节点；右旋，则转轴是o的左子节点
-	n.ch[d ^ 1] = pivot.ch[d]
-	pivot.ch[d] = n
-	return pivot
+func (h *IHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
 }
-
-
-// 树堆结构
-type treap struct {
-	root *node
-}
-
-
-// 插入树堆
-func (t *treap) Put(val int) {
-	t.root = t.put(t.root, val)
-}
-
-func (t *treap) put(root *node, val int) *node {
-	if root == nil {
-		return &node{
-			priority: rand.Int(),
-			val:      val,
-		}
-	}
-	d := root.contrast(val)
-	root.ch[d] = t.put(root.ch[d], val)
-	if root.ch[d].priority > root.priority {
-		root = root.rotate(d ^ 1) //插入节点是o的左子节点，进行右旋；插入节点是o的右子节点，进行左旋
-	}
-	return root
-}
-
-
-// 从树堆中删除
-func (t *treap) Del(val int) {
-	t.root = t.del(t.root, val)
-}
-
-func (t *treap) del(root *node, val int) *node {
-	if d := root.contrast(val); d >= 0 {
-		root.ch[d] = t.del(root.ch[d], val)
-		return root
-	}
-
-	if root.ch[0] == nil {
-		return root.ch[1]
-	}
-	if root.ch[1] == nil {
-		return root.ch[0]
-	}
-
-	d := 0
-	if root.ch[0].priority > root.ch[1].priority {
-		d = 1
-	}
-	root = root.rotate(d)
-	root.ch[d] = t.del(root.ch[d], val)
-	return root
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const highBit = 30
-
-type trie struct {
-	left, right *trie
-}
-
-func (t *trie) add(num int) {
-	cur := t
-	for i := highBit; i >= 0; i-- {
-		bit := num >> i & 1
-		if bit == 0 {
-			if cur.left == nil {
-				cur.left = &trie{}
-			}
-			cur = cur.left
-		} else {
-			if cur.right == nil {
-				cur.right = &trie{}
-			}
-			cur = cur.right
-		}
-	}
-}
-
-func (t *trie) check(num int) (x int) {
-	cur := t
-	for i := highBit; i >= 0; i-- {
-		bit := num >> i & 1
-		if bit == 0 {
-			// a_i 的第 k 个二进制位为 0，应当往表示 1 的子节点 right 走
-			if cur.right != nil {
-				cur = cur.right
-				x = x*2 + 1
-			} else {
-				cur = cur.left
-				x = x * 2
-			}
-		} else {
-			// a_i 的第 k 个二进制位为 1，应当往表示 0 的子节点 left 走
-			if cur.left != nil {
-				cur = cur.left
-				x = x*2 + 1
-			} else {
-				cur = cur.right
-				x = x * 2
-			}
-		}
-	}
-	return
-}
-
-func findMaximumXOR(nums []int) (x int) {
-	root := &trie{}
-	for i := 1; i < len(nums); i++ {
-		// 将 nums[i-1] 放入字典树，此时 nums[0 .. i-1] 都在字典树中
-		root.add(nums[i-1])
-		// 将 nums[i] 看作 ai，找出最大的 x 更新答案
-		x = max(x, root.check(nums[i]))
-	}
-	return
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-
-
-func divide(a int, b int) int {
-	if b == 0 {
-		return 0
-	}
-
-	if a == math.MinInt32 {
-		if b == -1 {
-			return math.MaxInt32
-		} else {
-			return math.MinInt32
-		}
-	}
-
-	sign := 1
-	if (a > 0 && b < 0) || (a < 0 && b > 0) {
-		sign = -1
-	}
-
-	abs := func(a int) int {
-		if a < 0 {
-			return -a
-		}
-		return a
-	}
-	a, b = abs(a), abs(b)
-	res := 0
-
-	for i := 31; i >= 0; i-- {
-		if a >> i >= b {
-			a -= b << i
-			res += 1 << i
-		}
-	}
-	return res * sign
-}
-
-
-func addBinary(a string, b string) string {
-
-	al, bl := len(a), len(b)
-	if al < 1 || bl < 1 {
-		return ""
-	}
-
-	carry, res := 0, ""
-
-	max := func(x, y int) int{
-		if x > y {
-			return x
-		}
-		return y
-	}
-
-	n := max(al, bl)
-	for i := 0; i < n; i++ {
-		if i < al {
-			carry += int(a[al - i - 1] - '0')
-		}
-		if i < bl {
-			carry += int(b[bl - i - 1] - '0')
-		}
-		res = strconv.Itoa(carry % 2) + res
-		carry /= 2
-	}
-	if carry > 0 {
-		res = "1" + res
-	}
-	return res
-}
-
-
-func countBits(n int) []int {
-	bits := make([]int, n + 1)
-	onceCount := func(x int) (ones int) {
-		for ; x > 0; x &= x - 1 {
-			ones++
-		}
-		return
-	}
-	for i := range bits {
-		bits[i] = onceCount(i)
-	}
-	return bits
-
-}
-
-
-func singleNumber(nums []int) int {
-	res := int32(0)
-	for i := 0; i < 32; i++ {
-		total := int32(0)
-		for _, num := range nums {
-			total += int32(num) >> i & 1
-		}
-		if total % 3 > 0 {
-			res |= 1 << i
-		}
-	}
-	return int(res)
-}
-
-
-func maxProduct(words []string) int {
-	if words == nil || len(words) < 2 {
-		return 0
-	}
-
-	bitRes := make([]int, len(words))
-	for i := 0; i < len(bitRes); i++ {
-		for _, c := range words[i] {
-			bitRes[i] |= 1 << (c - 'a')
-		}
-	}
-
-	res := 0
-	max := func(x, y int) int {
-		if x > y {
-			return x
-		}
-		return y
-	}
-	for i := 0; i < len(bitRes); i++ {
-		for j := i + 1; j < len(bitRes); j++ {
-			if bitRes[i] & bitRes[j] == 0 {
-				res = max(res, len(words[i]) * len(words[j]))
-			}
-		}
-	}
-	return res
-}
-
-func twoSum(numbers []int, target int) []int {
-
-	if numbers == nil || len(numbers) < 2 {
+func kSmallestPairs(nums1 []int, nums2 []int, k int) [][]int {
+	if len(nums1) < 1 || len(nums2) < 1 || k < 1 {
 		return nil
 	}
-
-	start, end := 0, len(numbers) - 1
-	for start < end {
-		if numbers[start] + numbers[end] < target {
-			start++
-		} else if numbers[start] + numbers[end] > target {
-			end--
-		} else {
-			return []int{start, end}
-		}
-	}
-	return nil
-}
-
-
-
-func threeSum(nums []int) [][]int {
-	if nums == nil || len(nums) < 3 {
-		return nil
-	}
-
-	sort.Ints(nums)
-
-	var res [][]int
-	for i := 0; i < len(nums) - 2; i++ {
-		if nums[i] > 0 {
-			break
-		}
-		if i > 0 && nums[i] == nums[i - 1] {
-			continue
-		}
-
-		start, end := i + 1, len(nums) - 1
-		for start < end {
-			sum := nums[i] + nums[start] + nums[end]
-			if sum < 0 {
-				start++
-				for start < end && nums[start] == nums[start - 1] {
-					start++
-				}
-			} else if sum > 0 {
-				end--
-				for start < end && nums[end] == nums[end + 1] {
-					end--
-				}
-			} else {
-				res = append(res, []int{nums[i], nums[start], nums[end]})
-				start++
-				end--
-				for start < end && nums[start] == nums[start - 1] {
-					start++
-				}
-				for start < end && nums[end] == nums[end + 1] {
-					end--
-				}
-			}
-		}
-	}
-	return res
-}
-
-
-func minSubArrayLen(target int, nums []int) int {
-	if nums == nil || len(nums) < 1 || target < 1 {
-		return 0
-	}
-	res := len(nums)
-	min := func(x, y int) int {
+	Min := func(x, y int) int {
 		if x < y {
 			return x
 		}
 		return y
 	}
-
-	sum := 0
-	for i, j := 0, 0; j < len(nums); j++ {
-		sum += nums[j]
-		for i <= j && sum >= target {
-			res = min(res, j - i + 1)
-			sum -= nums[i]
-			i++
+	h := &IHeap{}
+	heap.Init(h)
+	n1, n2 := Min(len(nums1), k), Min(len(nums2), k)
+	for i := 0; i < n1; i++ {
+		for j := 0; j < n2; j++ {
+			heap.Push(h, []int{nums1[i], nums2[j]})
+			if h.Len() > k {
+				heap.Pop(h)
+			}
 		}
+	}
+	res := make([][]int, 0)
+	for h.Len() > 0 {
+		res = append(res, heap.Pop(h).([]int))
 	}
 	return res
 }
 
 
-func numSubarrayProductLessThanK(nums []int, k int) int {
-	if nums == nil || len(nums) < 1 || k < 0 {
-		return 0
-	}
 
-	count, sum := 0, 1
-	for i, j := 0, 0; j < len(nums); j++ {
-		sum *= nums[j]
-		for i <= j && sum >= k {
-			sum /= nums[i]
-			i++
-		}
-		if i <= j {
-			count += j - i +1
-		}
-	}
-	return count
+
+
+//
+//
+//
+//
+//type Trie struct {
+//	child [26]*Trie
+//	isEnd bool
+//
+//}
+///** Initialize your data structure here. */
+//func Constructor() Trie {
+//	return Trie{}
+//}
+///** Inserts a word into the trie. */
+//func (this *Trie) Insert(word string)  {
+//	node := this
+//	for _, ch := range word {
+//		ch -= 'a'
+//		if node.child[ch] == nil {
+//			node.child[ch] = &Trie{}
+//		}
+//		node = node.child[ch]
+//	}
+//	node.isEnd = true
+//}
+///** Returns if the word is in the trie. */
+//func (this *Trie) Search(word string) bool {
+//	node := this.SearchPrefix(word)
+//	return node != nil && node.isEnd
+//}
+///** Returns if there is any word in the trie that starts with the given prefix. */
+//func (this *Trie) StartsWith(prefix string) bool {
+//	node := this.SearchPrefix(prefix)
+//	return node != nil
+//}
+//func (this *Trie) SearchPrefix(prefix string) *Trie {
+//	node := this
+//	for _, ch := range prefix {
+//		ch -= 'a'
+//		if node.child[ch] == nil {
+//			return nil
+//		}
+//		node = node.child[ch]
+//	}
+//	return node
+//}
+
+
+
+
+type trie struct {
+	child [2]*trie
+	isEnd bool
 }
-
-func subarraySum(nums []int, k int) int {
-	if nums == nil || len(nums) < 1 {
-		return 0
+const numSize = 30
+func (t *trie) insert(num int) {
+	node := t
+	for i := numSize; i >= 0; i-- {
+		bit := (num >> i) & 1
+		if node.child[bit] == nil {
+			node.child[bit] = &trie{}
+		}
+		node = node.child[bit]
 	}
-
-	preSum, count  := 0, 0
-	dict := make(map[int]int)
-	dict[0] = 1
-	for _, n := range nums {
-		preSum += n
-		count += dict[preSum - k]
-		dict[preSum] += 1
-	}
-	return count
+	node.isEnd = true
 }
-
-
-func findMaxLength(nums []int) int {
-
-	if nums == nil || len(nums) < 1 {
-		return 0
-	}
-	for i, v := range nums {
-		if v == 0 {
-			nums[i] = -1
+func (t *trie) check(num int) int {
+	node := t
+	res := 0
+	for i := numSize; i >= 0; i-- {
+		bit := (num >> i) & 1
+		if node.child[bit ^ 1] != nil {
+			res |= 1 << i
+			node = node.child[bit ^ 1]
+		} else {
+			node = node.child[bit]
 		}
 	}
-	preSum, ans := 0, 0
-	dict := make(map[int]int)
-	dict[0] = -1
-
+	return res
+}
+func findMaximumXOR(nums []int) int {
+	if len(nums) < 1 {
+		return 0
+	}
+	res := 0
+	t := &trie{}
+	t.insert(nums[0])
 	max := func(x, y int) int {
 		if x > y {
 			return x
 		}
 		return y
 	}
-	for i, n := range nums {
-		preSum += n
-		if index, ok := dict[preSum]; ok {
-			ans = max(ans, i - index)
-		} else {
-			dict[preSum] = i
-		}
+	for i := 1; i < len(nums); i++ {
+		res = max(res, t.check(nums[i]))
+		t.insert(nums[i])
 	}
-
-	return ans
+	return res
 }
 
 
 
-func pivotIndex(nums []int) int {
-	if nums == nil || len(nums) < 1 {
+
+
+func searchInsert(nums []int, target int) int {
+	if len(nums) < 1 {
 		return -1
 	}
 
-	total, preSum := 0, 0
-	for _, n := range nums {
-		total += n
+	low, mid, high := 0, 0, len(nums) - 1
+	for low <= high {
+		mid = (low + high) >> 1
+		if nums[mid] > target {
+			high = mid - 1
+		} else if nums[mid] < target {
+			low = mid + 1
+		} else {
+			return mid
+		}
+	}
+	if nums[mid] < target {
+		return mid + 1
+	} else {
+		return mid
+	}
+}
+
+
+
+func singleNonDuplicate(nums []int) int {
+	f1 := func(nums []int) int {
+		res := 0
+		for _, n := range nums {
+			res ^= n
+		}
+		return res
 	}
 
-	for i, n := range nums {
-		if total - n == 2 * preSum {
-			return i
+	f2 := func(nums []int) int {
+		if len(nums) < 1 {
+			return -1
 		}
-		preSum += n
+		low, mid, high := 0, 0, len(nums) - 1
+		for low <= high {
+			mid = (low + high) >> 1
+			if mid < len(nums) - 1 && nums[mid] == nums[mid + 1] {
+				if mid % 2 == 0 { // 偶奇
+					low = mid + 2
+				} else {
+					high = mid -1
+				}
+			} else if mid > 0 && nums[mid] == nums[mid - 1] {
+				if mid % 2 == 0 {
+					high = mid - 2
+				} else {
+					low = mid + 1
+				}
+			} else {
+				return nums[mid]
+			}
+		}
+		return 0
+	}
+	f1(nums)
+	return f2(nums)
+}
+
+
+func mySqrt(x int) int {
+	if x < 0 {
+		return 0
+	}
+	low, high := 1, x >> 1 + 1
+	for low <= high {
+		mid := (low + high) >> 1
+		if mid * mid > x {
+			high = mid - 1
+		} else if mid * mid < x {
+			low = mid + 1
+		} else {
+			return mid
+		}
+	}
+	return high
+}
+
+
+func minEatingSpeed(piles []int, h int) int {
+	if len(piles) <  1 || h < len(piles) {
+		return 0
+	}
+
+	low, high := 1, 0
+	for _, p := range piles {
+		if p > high {
+			high = p
+		}
+	}
+	countTime := func(k int) (t int) {
+		for _, p := range piles {
+			t = p / k
+			if p % k > 0 {
+				t += 1
+			}
+		}
+		return
+	}
+	for low <= high {
+		mid := (low + high) >> 1
+		if countTime(mid) < h {
+			if mid == 1 || countTime(mid - 1) > h {
+				return mid
+			}
+			high = mid - 1
+		} else {
+			low = mid + 1
+		}
 	}
 	return -1
 }
 
-
-// 013-begin
-type NumMatrix struct {
-	sums [][]int
-}
-
-
-func Constructor(matrix [][]int) NumMatrix {
-	m, n := len(matrix), len(matrix[0])
-	sums := make([][]int, m + 1)
-	sums[0] = make([]int, n + 1)
-	for i, row := range matrix {
-		sums[i + 1] = make([]int, n + 1)
-		for j, v := range row {
-			sums[i + 1][j + 1] = sums[i + 1][j] + sums[i][j + 1] - sums[i][j] + v
+func merge(intervals [][]int) [][]int {
+	if len(intervals) < 1 {
+		return nil
+	}
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i][0] < intervals[j][0]
+	})
+	merged := make([][]int, 0)
+	merged = append(merged, intervals[0])
+	max := func(x, y int) int {
+		if x > y {
+			return x
+		}
+		return y
+	}
+	for i := 1; i < len(intervals); i++ {
+		if intervals[i][0] > merged[len(merged) - 1][1] {
+			merged = append(merged, intervals[i])
+		} else {
+			merged[len(merged) - 1][1] = max(merged[len(merged) - 1][1], intervals[i][1])
 		}
 	}
-	return NumMatrix{sums:sums}
+	return merged
 }
 
 
-func (nm *NumMatrix) SumRegion(row1 int, col1 int, row2 int, col2 int) int {
-	sum := 0
-	sum = nm.sums[row2 + 1][col2 + 1] - nm.sums[row1][col2 + 1] - nm.sums[row2 + 1][col1] + nm.sums[row1][col1]
-	return sum
+func relativeSortArray(arr1 []int, arr2 []int) []int {
+	if len(arr1) < 1 || len(arr2) < 1 {
+		return nil
+	}
+
+	max := 0
+	for _, n := range arr1 {
+		if n > max {
+			max = n
+		}
+	}
+	counts := make([]int, max + 1)
+
+	for _, n := range arr1 {
+		counts[n]++
+	}
+	var i int
+	for _, n := range arr2 {
+		for {
+			if counts[n] <= 0 {
+				break
+			}
+			arr1[i] = n
+			i++
+			counts[n]--
+		}
+	}
+	for n, _ := range counts {
+		for {
+			if counts[n] <= 0 {
+				break
+			}
+			arr1[i] = n
+			i++
+			counts[n]--
+		}
+	}
+	return arr1
 }
-// 013-end
+
+func findKthLargest(nums []int, k int) int {
+	for i := 1; i < len(nums); i++ {
+		if nums[i] < nums[i - 1] {
+			tmp := nums[i]
+			j := 0
+			for j = i - 1; j >= 0 && nums[j] > tmp; j-- {
+				nums[j + 1] = nums[j]
+			}
+			nums[j + 1] = tmp
+		}
+	}
+	return nums[len(nums) - k]
+}
+
+
+
+type ListNode struct {
+	Val int
+	Next *ListNode
+}
+func sortList(head *ListNode) *ListNode {
+
+	var (
+		splitList func(head *ListNode) *ListNode
+		mergeList func(head1, head2 *ListNode) *ListNode
+		mergeUp2DownSort func(head *ListNode) *ListNode
+	)
+	splitList = func(head *ListNode) *ListNode {
+		slow, fast := head, head.Next
+		for fast != nil &&& fast.Next != nil {
+			slow = slow.Next
+			fast = fast.Next.Next
+		}
+		midNode := slow.Next
+		slow.Next = nil
+		return midNode
+	}
+	mergeList = func(head1, head2 *ListNode) *ListNode {
+		front := &ListNode{}
+		cur := front
+		for head1 != nil && head2 != nil {
+			if head1.Val < head2.Val {
+				cur.Next = head1
+				head1 = head1.Next
+			} else {
+				cur.Next = head2
+				head2 = head2.Next
+			}
+			cur = cur.Next
+		}
+		for head1 != nil {
+			cur.Next = head1
+			cur = cur.Next
+			head1 = head1.Next
+		}
+		for head2 != nil {
+			cur.Next = head2
+			cur = cur.Next
+			head2 = head2.Next
+		}
+		return front.Next
+	}
+	mergeUp2DownSort = func(head *ListNode) *ListNode {
+		if head == nil || head.Next == nil {
+			return head
+		}
+		head1, head2 := head, splitList(head)
+		head1 = mergeUp2DownSort(head1)
+		head2 = mergeUp2DownSort(head2)
+		return mergeList(head1, head2)
+	}
+	return mergeUp2DownSort(head)
+
+}
+
+
+func subsets(nums []int) [][]int {
+
+	var (
+		res [][]int
+		cur []int
+		backtrack1 func(idx int)
+		backtrack2 func(idx int)
+	)
+
+	backtrack1 = func(idx int) {
+		if idx == len(nums) {
+			res = append(res, append([]int{}, cur...))
+			return
+		}
+		backtrack1(idx + 1)
+
+		cur = append(cur, nums[idx])
+		backtrack1(idx + 1)
+		cur = cur[:len(cur)-1]
+	}
+	backtrack2 = func(idx int) {
+		res = append(res, append([]int{}, cur...))
+		for i := idx; i < len(nums); i++ {
+			cur = append(cur, nums[i])
+			backtrack2(i + 1)
+			cur = cur[:len(cur)-1]
+		}
+	}
+	//backtrack1(0)
+	backtrack2(0)
+	return res
+}
+
+
+func combine(n int, k int) [][]int {
+	if n < 1 || n > 20 || k < 1 || k > n {
+		return nil
+	}
+	var (
+		cur []int
+		res [][]int
+		backtrack func(idx int)
+	)
+	backtrack = func(idx int) {
+		if idx > n || len(cur) == k {
+			if len(cur) == k {
+				res = append(res, append([]int{}, cur...))
+			}
+			return
+		}
+		for i := idx; i <= n; i++ {
+			cur = append(cur, i)
+			backtrack(i + 1)
+			cur = cur[:len(cur)-1]
+		}
+	}
+	backtrack(1)
+	return res
+}
+
+func combinationSum(candidates []int, target int) [][]int {
+	if len(candidates) < 1 || target < 1 {
+		return nil
+	}
+	var (
+		cur []int
+		res [][]int
+		backtrack func(idx, sum int)
+	)
+	sort.Ints(candidates)
+	backtrack = func(idx, sum int) {
+		if idx >= len(candidates) || sum > target {
+			return
+		}
+		if sum == target {
+			res = append(res, append([]int{}, cur...))
+			return
+		}
+		for i := idx; i < len(candidates); i++ {
+			if sum + candidates[i] <= target && idx <= i {
+				sum += candidates[i]
+				cur = append(cur, candidates[i])
+				backtrack(i, sum)
+				sum -= candidates[i]
+				cur = cur[:len(cur)-1]
+			}
+		}
+	}
+	backtrack(0, 0)
+	return res
+}
+
+
+func permute(nums []int) [][]int {
+	if len(nums) < 1 || len(nums) > 6 {
+		return nil
+	}
+	var (
+		res [][]int
+		backtrack func(idx int)
+	)
+	backtrack = func(idx int) {
+		if idx == len(nums) {
+			res = append(res, append([]int{}, nums...))
+			return
+		}
+		for i := idx; i < len(nums); i++ {
+			nums[idx], nums[i] = nums[i], nums[idx]
+			backtrack(idx + 1)
+			nums[idx], nums[i] = nums[i], nums[idx]
+		}
+	}
+	backtrack(0)
+	return res
+}
+
+func permuteUnique(nums []int) [][]int {
+	if len(nums) < 1 || len(nums) > 8 {
+		return nil
+	}
+	var (
+		res [][]int
+		backtrack func(idx int)
+	)
+	backtrack = func(idx int) {
+		if idx == len(nums) {
+			res = append(res, append([]int{}, nums...))
+			return
+		}
+		m := make(map[int]int)
+		for i := idx; i < len(nums); i++ {
+			if _, ok := m[nums[i]]; !ok || i == idx {
+				m[nums[i]] = 1
+				nums[idx], nums[i] = nums[i], nums[idx]
+				backtrack(idx + 1)
+				nums[idx], nums[i] = nums[i], nums[idx]
+			}
+		}
+	}
+	backtrack(0)
+	return res
+}
+
+func generateParenthesis(n int) []string {
+	if n < 1 || n > 8 {
+		return nil
+	}
+	var (
+		res []string
+		backstrack func(cur string, left, right int)
+	)
+	backstrack = func(cur string, left, right int) {
+		if left > n || right > n || left < right {
+			return
+		}
+		if len(cur) == 2 * n && left == right {
+			res = append(res, cur)
+			return
+		}
+		backstrack(cur + "(", left + 1, right)
+		backstrack(cur + ")", left, right + 1)
+	}
+	backstrack("", 0, 0)
+	return res
+}
+
+func partition(s string) [][]string {
+
+	if len(s) < 1 || len(s) > 16 {
+		return nil
+	}
+	var (
+		cur []string
+		res [][]string
+		backtrack func(idx int)
+		isPalindrome func(s string) bool
+	)
+	isPalindrome = func(s string) bool {
+		l, r := 0, len(s) - 1
+		for l < r {
+			if s[l] != s[r] {
+				return false
+			}
+			l++
+			r--
+		}
+		return true
+	}
+	backtrack = func(idx int) {
+		if idx == len(s) {
+			res = append(res, append([]string{}, cur...))
+			return
+		}
+		for i := idx + 1; i <= len(s); i++ {
+			if isPalindrome(s[idx:i]) {
+				cur = append(cur, s[idx:i])
+				backtrack(i)
+				cur = cur[:len(cur)-1]
+			}
+		}
+	}
+	backtrack(0)
+	return res
+}

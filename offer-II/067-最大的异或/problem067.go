@@ -1,4 +1,4 @@
-/* Copyright 2022 Baidu Inc. All Rights Reserved. */
+/* *****. */
 /* - please input the go file action-  */
 /*
 modification history
@@ -31,6 +31,8 @@ func findMaximumXOR(nums []int) int {
 
 
 // 字典树
+// https://leetcode-cn.com/problems/ms70jA/solution/zui-da-de-yi-huo-by-leetcode-solution-hr7m/
+// 我们也可以将数组中的元素看成长度为 31 的字符串，字符串中只包含 0 和 1。如果我们将字符串放入字典树中，那么在字典树中查询一个字符串的过程，恰好就是从高位开始确定每一个二进制位的过程
 
 type Trie struct {
 	children [2]*Trie

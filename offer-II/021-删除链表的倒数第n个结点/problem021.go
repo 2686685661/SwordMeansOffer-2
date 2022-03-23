@@ -14,6 +14,11 @@ please input description
 package _21_删除链表的倒数第_n_个结点
 
 
+/**
+快慢指针
+https://leetcode-cn.com/problems/c32eOV/solution/tu-jie-kuai-man-zhi-zhen-ji-qiao-yuan-li-rdih/
+ */
+
 type ListNode struct {
 	Val int
 	Next *ListNode

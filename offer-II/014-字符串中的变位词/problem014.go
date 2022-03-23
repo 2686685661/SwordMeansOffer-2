@@ -13,7 +13,9 @@ please input description
 
 package _14_字符串中的变位词
 
-
+/**
+全排列参考：https://www.cnblogs.com/sclczk/p/11024022.html
+ */
 
 /**
 妈的，第一反应是全排列，我真傻b
