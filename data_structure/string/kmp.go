@@ -1,4 +1,4 @@
-/* Copyright 2021 Baidu Inc. All Rights Reserved. */
+/* ***** */
 /* - please input the go file action-  */
 /*
 modification history
